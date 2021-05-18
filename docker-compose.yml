@@ -1,0 +1,34 @@
+version: '3'
+services:
+  web:
+    # build: . # assume that we alread have Dockerfile.dev
+    build:
+      # use context to specify where for this image to pull from
+      # we wan all the files (reactproject directory)
+      context: . 
+      # location of the dockerfile
+      dockerfile: Dockerfile.dev
+    ports:
+      # use dash - to create an array
+      - "3000:3000"
+    volumes:
+      # do not try to map a folder up against /app/node_modules inside the container
+      # to make sure we don't overwrite the node_modules from the initialization
+      # don't forget to add "/" infornt of the path
+      - /app/node_modules  
+      #map the current folder outside the container to the folder inside the container
+      - .:/app 
+    # add this in case the React app won't load beacuse of Windows not detecting changes
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  # add a service dedicated for the test. Beware of the indentation inside the docker-compose.yml file.
+  tests:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    # overwrite start command with npm run test
+    command: ["npm", "run", "test"]

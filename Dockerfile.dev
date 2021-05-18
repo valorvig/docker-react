@@ -1,0 +1,13 @@
+# .dev - run this file in development
+
+FROM node:alpine
+
+WORKDIR '/app'
+
+COPY package.json .
+RUN npm install
+
+# with docker-compose, this COPY ino longer necessary. However. let's leave it there as a reminder.
+COPY . .
+
+CMD ["npm","run","start"]
