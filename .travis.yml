@@ -1,0 +1,21 @@
+# require super user level
+sudo: required
+services:
+  # Travis is going to install a copy of docker into our little running container
+  - docker
+
+# execute commands before our tests are run
+before_install:
+  # use name instead of random id (only use in Travis)
+  # - docker build -t whatever_name -f Dockerfile.dev .
+  - docker build -t stephen/docker-react -f Dockerfile.dev .
+
+# run our test inside the container
+# normally, 'npm run test' will hang onthe menu waiting for our input and never exits. 
+# So, we have to make sure it progresses
+script:
+  # - docker run USERNAME/docker-react npm run test -- --coverage
+  # first -- is the end of command and the '--coverage' is to prevent from the command to be treated as -c -o -v -e ...
+  - docker run -e CI=true stephen/docker-react npm run test
+
+  # As soon as we push up these changes to github, Travis should kick into gear and attempt to pull down our code, build the image, test it, and then report back to us
