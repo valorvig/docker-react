@@ -18,4 +18,32 @@ script:
   # first -- is the end of command and the '--coverage' is to prevent from the command to be treated as -c -o -v -e ...
   - docker run -e CI=true stephen/docker-react npm run test
 
+# Travis CI comes preconfigured to different hosting providers such as AWS 
+deploy:
+  # Tell TRavis to use this set of instructions to automatically deploy our application
+  provider: elasticbeanstalk
+  # In my case, my elaseticbeanstalk has been cr4eated based on southeast region
+  # Dockeraws-env.eba-xkrmycep.ap-southeast-1.elasticbeanstalk.com
+  region: "ap-southeast-1"
+  # name of the app we created back in the elastic beanstalk dashboard
+  app: "docker-aws"
+  # The app running inside the elastic beanstalk is not really referred as an app, but the "environment"
+  env: "Dockeraws-env"
+  # Travis will take all files from our github repo, zip them into a single file, 
+  # copy them over to an S3 bucket (a hard drive running on AWS), and upload this new zip file. 
+  # Later Travis will tell Elastic Beanstalk to use its zip file to redeploy our app.
+  # Provide the name of the bucket that Travis CI is going to our zip file into.
+  bucket_name: "elasticbeanstalk-ap-southeast-1-377907238641"
+  # our file is not in that bucket yet, so the initial path is our app's name, docker-aws
+  bucket_path: "docker-aws"
+  # Every time we push code to branch "master", deploy it.
+  on:
+    branch: master
+  # access_key_id: $AWS_ACCESS_KEY
+  # secret_access_key:
+  #   secure: "$AWS_SECRET_KEY"
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+  
+
   # As soon as we push up these changes to github, Travis should kick into gear and attempt to pull down our code, build the image, test it, and then report back to us
