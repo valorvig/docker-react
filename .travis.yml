@@ -42,8 +42,8 @@ deploy:
   # access_key_id: $AWS_ACCESS_KEY
   # secret_access_key:
   #   secure: "$AWS_SECRET_KEY"
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
   
 
   # As soon as we push up these changes to github, Travis should kick into gear and attempt to pull down our code, build the image, test it, and then report back to us
