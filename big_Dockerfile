@@ -7,7 +7,7 @@
 # Build Phase
 FROM node:alpine
 WORKDIR '/app'
-COPY package*.json ./
+COPY package.json .
 RUN npm install
 COPY . .
 # Its output is the build folder in the working directory
