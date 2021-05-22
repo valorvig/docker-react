@@ -19,6 +19,10 @@ RUN npm run build
 # All we care is the 'app/build' directory which is the result from the Build Phase
 # Normally, we could only have a single 'FROM', but the 'FROM' will be terminate after its succession.
 FROM nginx
+# Expose instruction tells devs to read inside the docker, and it does nothing.
+# However, when Elastic Beanstalk starts up our docker container, it's going to look for 
+# the Dockerfile and the EXPOSE instruction (to map the port automatically fro incoming traffic).
+EXPOSE 80 
 # COPY --from=builder /app/build
 # according to nginx doc, copy to herer, '/usr/share/nginx/html'
 COPY --from=0 /app/build /usr/share/nginx/html
